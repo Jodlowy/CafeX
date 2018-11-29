@@ -1,7 +1,9 @@
+import FoodTemperature.Hot
 import ItemType.Food
 
 case class CafeBill(items: List[Item]) {
   val billContent: List[Item] = items
+  private val maxServiceCharge: BigDecimal = 20
 
   def total: BigDecimal = {
     val itemsPrice = billContent match {
@@ -12,9 +14,15 @@ case class CafeBill(items: List[Item]) {
     applyService(itemsPrice)
   }
 
-  private def applyService(itemsPrice: BigDecimal): BigDecimal = {
+  private def serviceCharge: BigDecimal = {
     val foodItems = billContent.filter(_.itemType == Food)
-    if (foodItems.isEmpty) itemsPrice else itemsPrice + (itemsPrice * 0.1)
+    if (foodItems.isEmpty) 0 else if (foodItems.exists(_.foodTemperature == Hot))
+      0.2 else 0.1
+  }
+
+  private def applyService(itemsPrice: BigDecimal): BigDecimal = {
+    val charge = itemsPrice * serviceCharge
+    if (charge > maxServiceCharge) itemsPrice + maxServiceCharge else itemsPrice + charge
   }
 }
 

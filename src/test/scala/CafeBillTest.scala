@@ -1,3 +1,5 @@
+import FoodTemperature._
+import ItemType._
 import org.scalatest.{FunSpec, Matchers}
 
 class CafeBillTest extends FunSpec with Matchers {
@@ -31,5 +33,17 @@ class CafeBillTest extends FunSpec with Matchers {
       val totalWithCharge = Coffee.price + CheeseSandwich.price + ((Coffee.price + CheeseSandwich.price) * 0.1)
       bill.total should be(totalWithCharge)
     }
+    describe("for bill with hot food should apply 20%") {
+      val bill = CafeBill(Coffee, SteakSandwich)
+      val totalWithCharge = Coffee.price + SteakSandwich.price + ((Coffee.price + SteakSandwich.price) * 0.2)
+      bill.total should be(totalWithCharge)
+    }
+  }
+  describe("for bill where charge exceeds 20 pounds should add just that") {
+    //creating special Items otherwise it would have to be massive for such a Sandwich Party :)
+    val bill = CafeBill(Item(Food, 55, Hot), Item(Food, 55, Hot))
+
+    val totalWithCharge = (55 * 2) + 20
+    bill.total should be(totalWithCharge)
   }
 }
