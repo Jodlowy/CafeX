@@ -20,10 +20,16 @@ class CafeBillTest extends FunSpec with Matchers {
       }
     }
   }
+
   describe("Counting charge") {
     describe("for bill with only drinks should apply no extra charge") {
       val bill = CafeBill(Coffee, Cola)
       bill.total should be(Coffee.price + Cola.price)
+    }
+    describe("for bill with cold food should apply 10%") {
+      val bill = CafeBill(Coffee, CheeseSandwich)
+      val totalWithCharge = Coffee.price + CheeseSandwich.price + ((Coffee.price + CheeseSandwich.price) * 0.1)
+      bill.total should be(totalWithCharge)
     }
   }
 }
