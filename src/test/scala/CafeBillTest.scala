@@ -11,6 +11,9 @@ class CafeBillTest extends FunSpec with Matchers {
       it("should contain no items") {
         bill.billContent should be(empty)
       }
+      it("should not charge anything") {
+        bill.total should be(0)
+      }
     }
     describe("bill with items") {
       val bill = CafeBill(Cola, Coffee)
